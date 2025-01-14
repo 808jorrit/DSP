@@ -151,14 +151,12 @@
 
 <script>
   function generatePrompt() {
-    // Retrieve input values
     const topic = document.getElementById('topic').value;
     const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.text);
     const purpose = document.getElementById('purpose').value;
     const audience = document.getElementById('audience').value;
     const specifications = document.getElementById('specifications').value;
 
-    // Start building the prompt
     let promptText = '';
 
     if (topic) {
@@ -174,7 +172,7 @@
     }
 
     if (audience) {
-      promptText += `The summary is aimed at ${audience}. ` adjust the level of language proficiency accordingly;
+      promptText += `The summary is aimed at ${audience}.  adjust the level of language proficiency accordingly`;
     }
 
     if (specifications) {
