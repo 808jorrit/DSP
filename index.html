@@ -90,6 +90,9 @@
             <ul id="savedPromptsList" class="list-group mt-2">
               <!-- List of saved prompts will appear here -->
             </ul>
+            <div class="d-flex justify-content-between mt-3">
+              <button class="btn btn-danger" onclick="clearSavedPrompts()">Clear Saved Prompts</button>
+            </div>
           </div>
         </div>
       </div>
@@ -214,6 +217,13 @@
       alert('Prompt and settings loaded!');
     }
   
+  function clearSavedPrompts() {
+    if (confirm('Are you sure you want to clear all saved prompts? This action cannot be undone.')) {
+      localStorage.removeItem('prompts');
+      loadSavedPrompts();
+      alert('All saved prompts have been cleared.');
+  }
+}
     // Load saved prompts on page load
     window.onload = loadSavedPrompts;
   </script>
