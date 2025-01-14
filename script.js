@@ -1,135 +1,88 @@
-// Array to cache saved prompts
 let savedPrompts = [];
 
-// Function to generate a prompt
-async function generatePrompt() {
-  const topic = document.getElementById("topic").value;
-  const channel = Array.from(document.getElementById("channel").selectedOptions).map(opt => opt.value);
-  const purpose = document.getElementById("purpose").value;
-  const audience = document.getElementById("audience").value;
-  const specifications = document.getElementById("specifications").value;
-
-  if (!topic || channel.length === 0 || !purpose || !audience) {
-    alert("Please fill in all required fields!");
-    return;
-  }
-
-  try {
-    const response = await fetch("/generate-prompt", {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      body: JSON.stringify({ topic, channel, purpose, audience, specifications }),
-    });
-
-    const data = await response.json();
-    document.getElementById("generatedPrompt").innerText = data.generatedPrompt;
-  } catch (error) {
-    console.error("Error generating prompt:", error);
-    alert("An error occurred. Please try again.");
-  }
-}
-
-// Function to save the generated prompt
 async function savePrompt() {
   const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-  console.log('Saving prompt:', generatedPrompt);
+  const topic = document.getElementById('topic').value;
+  const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.text);
+  const purpose = document.getElementById('purpose').value;
+  const audience = document.getElementById('audience').value;
+  const specifications = document.getElementById('specifications').value;
 
   if (!generatedPrompt) {
     alert('Please generate a prompt first!');
     return;
   }
 
-  // Collect form data
-  const formData = {
-    topic: document.getElementById('topic').value,
-    channel: Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.value),
-    purpose: document.getElementById('purpose').value,
-    audience: document.getElementById('audience').value,
-    specifications: document.getElementById('specifications').value
+  const promptData = {
+    id: Date.now(), // Unique ID for the prompt
+    version: savedPrompts.length + 1, // Incremental version
+    prompt: generatedPrompt,
+    settings: {
+      topic,
+      channels,
+      purpose,
+      audience,
+      specifications,
+    },
   };
 
-  try {
-    const response = await fetch('/save-prompt', {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
-      body: JSON.stringify({ 
-        prompt: generatedPrompt,
-        formData: formData
-      })
-    });
+  // Add to saved prompts
+  savedPrompts.push(promptData);
 
-    const data = await response.json();
-    console.log('Save response:', data);
-    alert(data.message);
-    location.reload(); // Refresh page
+  try {
+    // Save to the server or local storage
+    localStorage.setItem('savedPrompts', JSON.stringify(savedPrompts));
+    alert('Prompt and settings saved!');
+    loadSavedPrompts(); // Reload saved prompts
   } catch (error) {
     console.error('Error saving prompt:', error);
+    alert('Failed to save prompt');
   }
 }
 
-// Function to load saved prompts from the backend
-async function loadSavedPrompts() {
-  try {
-    const response = await fetch('/saved-prompts');
-    const data = await response.json();
-    console.log('Loaded prompts:', data);
+function loadSavedPrompts() {
+  // Load from local storage or server
+  const storedPrompts = JSON.parse(localStorage.getItem('savedPrompts')) || [];
+  savedPrompts = storedPrompts;
 
-    const savedPromptsList = document.getElementById('savedPromptsList');
-    savedPromptsList.innerHTML = '';
+  const savedPromptsDiv = document.getElementById('savedPromptsList');
+  savedPromptsDiv.innerHTML = '';
 
-    if (data.savedPrompts && data.savedPrompts.length > 0) {
-      data.savedPrompts.forEach((saved) => {
-        const li = document.createElement('li');
-        li.className = 'list-group-item';
-        li.innerText = saved.preview;
-        li.onclick = () => restorePromptAndForm(saved);
-        savedPromptsList.appendChild(li);
-      });
-    }
-  } catch (error) {
-    console.error('Error loading prompts:', error);
+  if (savedPrompts.length > 0) {
+    savedPrompts.forEach((savedPrompt) => {
+      const promptItem = document.createElement('li');
+      promptItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+      promptItem.innerHTML = `
+        <span>Version ${savedPrompt.version}: ${savedPrompt.prompt.substring(0, 50)}...</span>
+        <button class="btn btn-sm btn-primary" onclick="reloadPrompt(${savedPrompt.id})">Reload</button>
+      `;
+      savedPromptsDiv.appendChild(promptItem);
+    });
   }
 }
 
-function restorePromptAndForm(saved) {
-  // Restore prompt
-  document.getElementById('generatedPrompt').innerText = saved.fullText;
-  
-  // Restore form data
-  const formData = saved.formData;
-  document.getElementById('topic').value = formData.topic;
-  
-  // Restore channel selections
-  const channelSelect = document.getElementById('channel');
-  Array.from(channelSelect.options).forEach(option => {
-    option.selected = formData.channel.includes(option.value);
-  });
-  
-  document.getElementById('purpose').value = formData.purpose;
-  document.getElementById('audience').value = formData.audience;
-  document.getElementById('specifications').value = formData.specifications;
-}
-
-// Function to copy the generated prompt to the clipboard
-function copyPrompt() {
-  const prompt = document.getElementById("generatedPrompt").innerText;
-
-  if (!prompt.trim()) {
-    alert("Nothing to copy!");
+function reloadPrompt(id) {
+  const promptData = savedPrompts.find((prompt) => prompt.id === id);
+  if (!promptData) {
+    alert('Prompt not found!');
     return;
   }
 
-  navigator.clipboard.writeText(prompt).then(
-    () => alert("Prompt copied to clipboard!"),
-    error => {
-      console.error("Error copying prompt:", error);
-      alert("Failed to copy the prompt. Please try again.");
-    }
-  );
+  // Populate the settings
+  document.getElementById('topic').value = promptData.settings.topic || '';
+  const channelSelect = document.getElementById('channel');
+  Array.from(channelSelect.options).forEach((option) => {
+    option.selected = promptData.settings.channels.includes(option.text);
+  });
+  document.getElementById('purpose').value = promptData.settings.purpose || '';
+  document.getElementById('audience').value = promptData.settings.audience || '';
+  document.getElementById('specifications').value = promptData.settings.specifications || '';
+
+  // Populate the prompt
+  document.getElementById('generatedPrompt').innerText = promptData.prompt;
+
+  alert('Prompt and settings reloaded!');
 }
 
-// Load saved prompts on page load
-document.addEventListener("DOMContentLoaded", loadSavedPrompts);
-
-// Make sure window.onload is set
+// Load prompts on page load
 window.onload = loadSavedPrompts;
