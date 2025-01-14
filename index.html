@@ -162,11 +162,11 @@
     let promptText = '';
 
     if (topic) {
-      promptText += `Generate a short story is focused on the ${topic}. `;
+      promptText += `Generate a short story / summary focused on the ${topic}, based on the attatched document. `;
     }
 
     if (channels.length > 0) {
-      promptText += `The content will be distributed on ${channels.join(', '). `;
+      promptText += `The content will be distributed on ${channels.join(', ') `;
     }
 
     if (purpose) {
@@ -178,7 +178,7 @@
     }
 
     if (specifications) {
-      promptText += ` ${specifications}`;
+      promptText += `rere ${specifications}`;
     }
 
     // Display the generated prompt
