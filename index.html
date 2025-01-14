@@ -162,23 +162,23 @@
     let promptText = '';
 
     if (topic) {
-      promptText += `This prompt is focused on the topic: ${topic}. `;
+      promptText += `Generate a short story is focused on the ${topic}. `;
     }
 
     if (channels.length > 0) {
-      promptText += `The content will be distributed on: ${channels.join(', ')}. `;
+      promptText += `The content will be distributed on ${channels.join(', ') and should therefore be tailored to the general tone, ${channels.join(', '). `;
     }
 
     if (purpose) {
-      promptText += `Its primary purpose is: ${purpose}. `;
+      promptText += `The goal is to ${purpose}. `;
     }
 
     if (audience) {
-      promptText += `The summary is aimed at: ${audience}. `;
+      promptText += `The summary is aimed at ${audience}. `;
     }
 
     if (specifications) {
-      promptText += `Additional specifications: ${specifications}`;
+      promptText += ` ${specifications}`;
     }
 
     // Display the generated prompt
