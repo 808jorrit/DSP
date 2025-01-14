@@ -97,53 +97,127 @@
     </div>
   </div>
 
-<script>
-  function generatePrompt() {
-    const topic = document.getElementById('topic').value;
-    const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.text);
-    const purpose = document.getElementById('purpose').value;
-    const audience = document.getElementById('audience').value;
-    const specifications = document.getElementById('specifications').value;
-
-    let promptText = '';
-
-    if (topic) {
-      promptText += ` Generate a short story / summary based on the attatched document. The topic is ${topic}.`;
+  <script>
+    function generatePrompt() {
+      // Retrieve input values
+      const topic = document.getElementById('topic').value;
+      const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.text);
+      const purpose = document.getElementById('purpose').value;
+      const audience = document.getElementById('audience').value;
+      const specifications = document.getElementById('specifications').value;
+  
+      // Start building the prompt
+      let promptText = '';
+  
+      if (topic) {
+        promptText += `Generate a short story / summary based on the attached document. The topic is ${topic}. `;
+      }
+  
+      if (channels.length > 0) {
+        promptText += `The content will be distributed on ${channels.join(', ')}; adjust length, jargon, and tone accordingly. `;
+      }
+  
+      if (purpose) {
+        promptText += `The goal is to ${purpose}. `;
+      }
+  
+      if (audience) {
+        promptText += `The summary is aimed at ${audience}; adjust the level of language proficiency accordingly. `;
+      }
+  
+      if (specifications) {
+        promptText += `Additional specifications: ${specifications}`;
+      }
+  
+      // Display the generated prompt
+      const generatedPromptDiv = document.getElementById('generatedPrompt');
+      generatedPromptDiv.innerText = promptText.trim();
     }
-
-    if (channels.length > 0) {
-      promptText += ` The content will be distributed on ${channels.join(', ')}. adjust length, jargon and tone accordingly.`;
+  
+    function copyPrompt() {
+      const generatedPrompt = document.getElementById('generatedPrompt').innerText;
+  
+      if (!generatedPrompt) {
+        alert('Please generate a prompt first!');
+        return;
+      }
+  
+      navigator.clipboard.writeText(generatedPrompt)
+        .then(() => alert('Prompt copied to clipboard!'))
+        .catch(err => alert('Failed to copy prompt.'));
     }
-
-    if (purpose) {
-      promptText += ` The goal is to ${purpose}. `;
+  
+    function savePrompt() {
+      const topic = document.getElementById('topic').value;
+      const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.value);
+      const purpose = document.getElementById('purpose').value;
+      const audience = document.getElementById('audience').value;
+      const specifications = document.getElementById('specifications').value;
+      const generatedPrompt = document.getElementById('generatedPrompt').innerText;
+  
+      if (!generatedPrompt) {
+        alert('Please generate a prompt first!');
+        return;
+      }
+  
+      const promptData = {
+        topic,
+        channels,
+        purpose,
+        audience,
+        specifications,
+        generatedPrompt,
+        timestamp: new Date().toISOString()
+      };
+  
+      let savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
+      savedPrompts.push(promptData);
+      localStorage.setItem('prompts', JSON.stringify(savedPrompts));
+  
+      alert('Prompt and settings saved successfully!');
+      loadSavedPrompts(); // Reload saved prompts
     }
-
-    if (audience) {
-      promptText += ` The summary is aimed at ${audience}. adjust the level of language proficiency accordingly. `;
+  
+    function loadSavedPrompts() {
+      const savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
+      const savedPromptsList = document.getElementById('savedPromptsList');
+      savedPromptsList.innerHTML = '';
+  
+      savedPrompts.forEach((promptData, index) => {
+        const listItem = document.createElement('li');
+        listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
+        listItem.textContent = `${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()}`;
+  
+        const loadButton = document.createElement('button');
+        loadButton.className = 'btn btn-sm btn-primary';
+        loadButton.textContent = 'Load';
+        loadButton.onclick = () => loadPromptSettings(promptData);
+  
+        listItem.appendChild(loadButton);
+        savedPromptsList.appendChild(listItem);
+      });
     }
-
-    if (specifications) {
-      promptText += ` additional specifications: ${specifications}`;
+  
+    function loadPromptSettings(promptData) {
+      document.getElementById('topic').value = promptData.topic;
+  
+      // Clear all channel selections first
+      Array.from(document.getElementById('channel').options).forEach(option => {
+        option.selected = promptData.channels.includes(option.value);
+      });
+  
+      document.getElementById('purpose').value = promptData.purpose;
+      document.getElementById('audience').value = promptData.audience;
+      document.getElementById('specifications').value = promptData.specifications;
+  
+      document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
+  
+      alert('Prompt and settings loaded!');
     }
-
-    // Display the generated prompt
-    const generatedPromptDiv = document.getElementById('generatedPrompt');
-    generatedPromptDiv.innerText = promptText.trim();
-  }
-
-  function copyPrompt() {
-    const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-
-    if (!generatedPrompt) {
-      alert('Please generate a prompt first!');
-      return;
-    }
-
-    navigator.clipboard.writeText(generatedPrompt)
-      .then(() => alert('Prompt copied to clipboard!'))
-      .catch(err => alert('Failed to copy prompt.'));
-  }
-</script>
+  
+    // Load saved prompts on page load
+    window.onload = loadSavedPrompts;
+  </script>
+  
 </body>
 </html>
