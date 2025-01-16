@@ -17,11 +17,15 @@
       <p class="lead">Create professional prompts with ease</p>
     </header>
     
-    <div>
-      <h1>ChatGPT Demo</h1>
-      <textarea id="userInput" placeholder="Type your question here"></textarea>
-      <button id="submitBtn">Ask GPT</button>
-      <div id="responseBox"></div>
+    <div class="mt-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-primary mb-3">ChatGPT Demo</h2>
+          <textarea id="userInput" class="form-control mb-3" placeholder="Type your question here" rows="4"></textarea>
+          <button id="submitBtn" class="btn btn-primary w-100">Ask GPT</button>
+          <div id="responseBox" class="mt-3 p-3 bg-light border rounded"></div>
+        </div>
+      </div>
     </div>
 
     <!-- Main Content -->
@@ -235,7 +239,7 @@
     window.onload = loadSavedPrompts;
 
 async function askGPT(prompt) {
-      const apiKey = "YOUR_OPENAI_API_KEY"; // Replace this with your OpenAI API key
+      const apiKey = "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"; // Replace this with your OpenAI API key
       const endpoint = "https://api.openai.com/v1/chat/completions";
 
       try {
