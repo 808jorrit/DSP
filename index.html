@@ -16,6 +16,7 @@
       <h1>Prompt Generator Tool</h1>
       <p class="lead">Create professional prompts with ease</p>
     </header>
+    
 <!-- AI model output --> 
     <div class="mt-5">
       <div class="card shadow-sm">
@@ -27,7 +28,12 @@
       <!-- Response will be displayed here -->
     </div>
   </div>
-
+ <div id="prompt-builder-container" style="display: none;">
+    <div class="prompt-container">
+      <label for="prompt-input">Enter your prompt:</label>
+      <textarea id="prompt-input"></textarea>
+      <button id="generate-button">Generate</button>
+    </div>
         </div>
       </div>
     </div>
