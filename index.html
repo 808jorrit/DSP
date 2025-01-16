@@ -22,14 +22,11 @@
       <div class="card shadow-sm">
         <div class="card-body">
           <h2 class="card-title text-primary mb-3">Output</h2>
-            <div class="output-container">
+          <div class="output-container">
     <div id="gemini-output">
       <!-- Response will be displayed here -->
     </div>
   </div>
-  <div id="prompt-builder-container" style="display: none;">
-    <div class="prompt-container">
-    </div>
         </div>
       </div>
     </div>
@@ -252,9 +249,6 @@
 const apiKeyContainer = document.getElementById('api-key-container');
 const apiKeyInput = document.getElementById('api-key-input');
 const saveApiKeyButton = document.getElementById('save-api-key-button');
-const promptBuilderContainer = document.getElementById('prompt-builder-container');
-const promptInput = document.getElementById('prompt-input');
-const generateButton = document.getElementById('generate-button');
 const geminiOutput = document.getElementById('gemini-output');
 const useGeneratedPromptButton = document.getElementById('useGeneratedPrompt');
 
@@ -271,10 +265,7 @@ function saveApiKey(key) {
 // Check if API key is already in session storage
 const storedApiKey = getApiKey();
 
-if (storedApiKey) {
-  // If API key exists, show the prompt builder
-  promptBuilderContainer.style.display = 'block';
-} else {
+if (!storedApiKey) {
   // If API key doesn't exist, show the API key input
   apiKeyContainer.style.display = 'block';
 }
@@ -284,25 +275,23 @@ saveApiKeyButton.addEventListener('click', () => {
   if (apiKey) {
     saveApiKey(apiKey);
     apiKeyContainer.style.display = 'none';
-    promptBuilderContainer.style.display = 'block';
   } else {
     alert('Please enter your API key.');
   }
 });
 
-generateButton.addEventListener('click', async () => {
-  const promptText = promptInput.value;
+useGeneratedPromptButton.addEventListener('click', async () => {
+  const generatedPromptText = document.getElementById('generatedPrompt').innerText;
   const apiKey = getApiKey(); // Get the API key from session storage
 
   if (!apiKey) {
     alert('API key not found. Please enter it.');
     apiKeyContainer.style.display = 'block';
-    promptBuilderContainer.style.display = 'none';
     return;
   }
 
-  if (!promptText.trim()) {
-    geminiOutput.textContent = "Please enter a prompt.";
+  if (!generatedPromptText.trim()) {
+    geminiOutput.textContent = "Please generate a prompt first.";
     return;
   }
 
@@ -316,7 +305,7 @@ generateButton.addEventListener('click', async () => {
       },
       body: JSON.stringify({
         contents: [{
-          parts: [{ text: promptText }],
+          parts: [{ text: generatedPromptText }],
         }],
       }),
     });
@@ -341,12 +330,6 @@ generateButton.addEventListener('click', async () => {
     console.error("Error calling Gemini API:", error);
     geminiOutput.textContent = "An error occurred while generating the response.";
   }
-});
-
-useGeneratedPromptButton.addEventListener('click', () => {
-  const generatedPromptText = document.getElementById('generatedPrompt').innerText;
-  document.getElementById('prompt-input').value = generatedPromptText;
-  generateButton.click(); // Programmatically click the existing generate button
 });
 
 </script>
