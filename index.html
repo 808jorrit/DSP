@@ -7,7 +7,7 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  
+
 </head>
 <body>
   <div class="container my-5">
@@ -16,8 +16,8 @@
       <h1>Prompt Generator Tool</h1>
       <p class="lead">Create professional prompts with ease</p>
     </header>
-    
-<!-- AI model output --> 
+
+<!-- AI model output -->
     <div class="mt-5">
       <div class="card shadow-sm">
         <div class="card-body">
@@ -103,6 +103,7 @@
             <div class="d-flex justify-content-between mt-3">
               <button class="btn btn-success" onclick="copyPrompt()">Copy Prompt</button>
               <button class="btn btn-secondary" onclick="savePrompt()">Save Prompt</button>
+              <button class="btn btn-info" id="useGeneratedPrompt">Use Prompt</button>
             </div>
 
             <!-- Saved Prompts List -->
@@ -131,48 +132,48 @@
       const purpose = document.getElementById('purpose').value;
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
-  
+
       // Start building the prompt
       let promptText = '';
-  
+
       if (topic) {
         promptText += `Generate a short story / summary based on the attached document. The topic is ${topic}. `;
       }
-  
+
       if (channels.length > 0) {
         promptText += `The content will be distributed on ${channels.join(', ')}; adjust length, jargon, and tone accordingly. `;
       }
-  
+
       if (purpose) {
         promptText += `The goal is to ${purpose}. `;
       }
-  
+
       if (audience) {
         promptText += `The summary is aimed at ${audience}; adjust the level of language proficiency accordingly. `;
       }
-  
+
       if (specifications) {
         promptText += `Additional specifications: ${specifications}`;
       }
-  
+
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
       generatedPromptDiv.innerText = promptText.trim();
     }
-  
+
     function copyPrompt() {
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-  
+
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
         return;
       }
-  
+
       navigator.clipboard.writeText(generatedPrompt)
         .then(() => alert('Prompt copied to clipboard!'))
         .catch(err => alert('Failed to copy prompt.'));
     }
-  
+
     function savePrompt() {
       const topic = document.getElementById('topic').value;
       const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.value);
@@ -180,12 +181,12 @@
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-  
+
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
         return;
       }
-  
+
       const promptData = {
         topic,
         channels,
@@ -195,52 +196,52 @@
         generatedPrompt,
         timestamp: new Date().toISOString()
       };
-  
+
       let savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
       savedPrompts.push(promptData);
       localStorage.setItem('prompts', JSON.stringify(savedPrompts));
-  
+
       alert('Prompt and settings saved successfully!');
       loadSavedPrompts(); // Reload saved prompts
     }
-  
+
     function loadSavedPrompts() {
       const savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
       const savedPromptsList = document.getElementById('savedPromptsList');
       savedPromptsList.innerHTML = '';
-  
+
       savedPrompts.forEach((promptData, index) => {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
         listItem.textContent = `${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()}`;
-  
+
         const loadButton = document.createElement('button');
         loadButton.className = 'btn btn-sm btn-primary';
         loadButton.textContent = 'Load';
         loadButton.onclick = () => loadPromptSettings(promptData);
-  
+
         listItem.appendChild(loadButton);
         savedPromptsList.appendChild(listItem);
       });
     }
-  
+
     function loadPromptSettings(promptData) {
       document.getElementById('topic').value = promptData.topic;
-  
+
       // Clear all channel selections first
       Array.from(document.getElementById('channel').options).forEach(option => {
         option.selected = promptData.channels.includes(option.value);
       });
-  
+
       document.getElementById('purpose').value = promptData.purpose;
       document.getElementById('audience').value = promptData.audience;
       document.getElementById('specifications').value = promptData.specifications;
-  
+
       document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
-  
+
       alert('Prompt and settings loaded!');
     }
-  
+
   function clearSavedPrompts() {
     if (confirm('Are you sure you want to clear all saved prompts? This action cannot be undone.')) {
       localStorage.removeItem('prompts');
@@ -258,6 +259,7 @@ const promptBuilderContainer = document.getElementById('prompt-builder-container
 const promptInput = document.getElementById('prompt-input');
 const generateButton = document.getElementById('generate-button');
 const geminiOutput = document.getElementById('gemini-output');
+const useGeneratedPromptButton = document.getElementById('useGeneratedPrompt');
 
 // Function to get the API key from session storage
 function getApiKey() {
@@ -344,7 +346,13 @@ generateButton.addEventListener('click', async () => {
   }
 });
 
+useGeneratedPromptButton.addEventListener('click', () => {
+  const generatedPromptText = document.getElementById('generatedPrompt').innerText;
+  document.getElementById('prompt-input').value = generatedPromptText;
+  generateButton.click(); // Programmatically click the existing generate button
+});
+
 </script>
-  
+
 </body>
 </html>
