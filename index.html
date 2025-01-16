@@ -7,7 +7,6 @@
   <!-- Bootstrap CSS -->
   <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/css/bootstrap.min.css" rel="stylesheet">
   <link rel="stylesheet" href="styles.css">
-  
 </head>
 <body>
   <div class="container my-5">
@@ -17,22 +16,25 @@
       <p class="lead">Create professional prompts with ease</p>
     </header>
     
-<!-- AI model output --> 
+    <!-- AI model output --> 
     <div class="mt-5">
       <div class="card shadow-sm">
         <div class="card-body">
           <h2 class="card-title text-primary mb-3">Output</h2>
           <div class="output-container">
-    <div id="gemini-output">
-      <!-- Response will be displayed here -->
-    </div>
-  </div>
- <div id="prompt-builder-container" style="display: none;">
-    <div class="prompt-container">
-      <label for="prompt-input">Enter your prompt:</label>
-      <textarea id="prompt-input"></textarea>
-      <button id="generate-button">Generate</button>
-    </div>
+            <div id="gemini-output">
+              <!-- Response will be displayed here -->
+            </div>
+          </div>
+          <div id="prompt-builder-container" style="display: none;">
+            <div class="prompt-container">
+              <label for="prompt-input">Enter your prompt:</label>
+              <div id="generatedPrompt" contenteditable="true" class="form-control" style="min-height: 150px;">
+                <!-- Editable content here -->
+              </div>
+              <button id="generate-button">Generate</button>
+            </div>
+          </div>
         </div>
       </div>
     </div>
@@ -118,11 +120,7 @@
       </div>
     </div>
   </div>
-  <div id="api-key-container">
-    <label for="api-key-input">Enter your Gemini API Key:</label>
-    <input type="password" id="api-key-input">
-    <button id="save-api-key-button">Save API Key</button>
-  </div>
+
   <script>
     function generatePrompt() {
       // Retrieve input values
@@ -131,48 +129,48 @@
       const purpose = document.getElementById('purpose').value;
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
-  
+
       // Start building the prompt
       let promptText = '';
-  
+
       if (topic) {
         promptText += `Generate a short story / summary based on the attached document. The topic is ${topic}. `;
       }
-  
+
       if (channels.length > 0) {
         promptText += `The content will be distributed on ${channels.join(', ')}; adjust length, jargon, and tone accordingly. `;
       }
-  
+
       if (purpose) {
         promptText += `The goal is to ${purpose}. `;
       }
-  
+
       if (audience) {
         promptText += `The summary is aimed at ${audience}; adjust the level of language proficiency accordingly. `;
       }
-  
+
       if (specifications) {
         promptText += `Additional specifications: ${specifications}`;
       }
-  
+
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
       generatedPromptDiv.innerText = promptText.trim();
     }
-  
+
     function copyPrompt() {
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-  
+
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
         return;
       }
-  
+
       navigator.clipboard.writeText(generatedPrompt)
         .then(() => alert('Prompt copied to clipboard!'))
         .catch(err => alert('Failed to copy prompt.'));
     }
-  
+
     function savePrompt() {
       const topic = document.getElementById('topic').value;
       const channels = Array.from(document.getElementById('channel').selectedOptions).map(opt => opt.value);
@@ -180,12 +178,12 @@
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-  
+
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
         return;
       }
-  
+
       const promptData = {
         topic,
         channels,
@@ -195,156 +193,62 @@
         generatedPrompt,
         timestamp: new Date().toISOString()
       };
-  
+
       let savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
       savedPrompts.push(promptData);
       localStorage.setItem('prompts', JSON.stringify(savedPrompts));
-  
+
       alert('Prompt and settings saved successfully!');
       loadSavedPrompts(); // Reload saved prompts
     }
-  
+
     function loadSavedPrompts() {
       const savedPrompts = JSON.parse(localStorage.getItem('prompts')) || [];
       const savedPromptsList = document.getElementById('savedPromptsList');
       savedPromptsList.innerHTML = '';
-  
+
       savedPrompts.forEach((promptData, index) => {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
         listItem.textContent = `${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()}`;
-  
+
         const loadButton = document.createElement('button');
         loadButton.className = 'btn btn-sm btn-primary';
         loadButton.textContent = 'Load';
         loadButton.onclick = () => loadPromptSettings(promptData);
-  
+
         listItem.appendChild(loadButton);
         savedPromptsList.appendChild(listItem);
       });
     }
-  
+
     function loadPromptSettings(promptData) {
       document.getElementById('topic').value = promptData.topic;
-  
+
       // Clear all channel selections first
       Array.from(document.getElementById('channel').options).forEach(option => {
         option.selected = promptData.channels.includes(option.value);
       });
-  
+
       document.getElementById('purpose').value = promptData.purpose;
       document.getElementById('audience').value = promptData.audience;
       document.getElementById('specifications').value = promptData.specifications;
-  
+
       document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
-  
+
       alert('Prompt and settings loaded!');
     }
-  
-  function clearSavedPrompts() {
-    if (confirm('Are you sure you want to clear all saved prompts? This action cannot be undone.')) {
-      localStorage.removeItem('prompts');
-      loadSavedPrompts();
-      alert('All saved prompts have been cleared.');
-  }
-}
+
+    function clearSavedPrompts() {
+      if (confirm('Are you sure you want to clear all saved prompts? This action cannot be undone.')) {
+        localStorage.removeItem('prompts');
+        loadSavedPrompts();
+        alert('All saved prompts have been cleared.');
+      }
+    }
+
     // Load saved prompts on page load
     window.onload = loadSavedPrompts;
-
-const apiKeyContainer = document.getElementById('api-key-container');
-const apiKeyInput = document.getElementById('api-key-input');
-const saveApiKeyButton = document.getElementById('save-api-key-button');
-const promptBuilderContainer = document.getElementById('prompt-builder-container');
-const promptInput = document.getElementById('prompt-input');
-const generateButton = document.getElementById('generate-button');
-const geminiOutput = document.getElementById('gemini-output');
-
-// Function to get the API key from session storage
-function getApiKey() {
-  return sessionStorage.getItem('geminiApiKey');
-}
-
-// Function to save the API key to session storage
-function saveApiKey(key) {
-  sessionStorage.setItem('geminiApiKey', key);
-}
-
-// Check if API key is already in session storage
-const storedApiKey = getApiKey();
-
-if (storedApiKey) {
-  // If API key exists, show the prompt builder
-  promptBuilderContainer.style.display = 'block';
-} else {
-  // If API key doesn't exist, show the API key input
-  apiKeyContainer.style.display = 'block';
-}
-
-saveApiKeyButton.addEventListener('click', () => {
-  const apiKey = apiKeyInput.value.trim();
-  if (apiKey) {
-    saveApiKey(apiKey);
-    apiKeyContainer.style.display = 'none';
-    promptBuilderContainer.style.display = 'block';
-  } else {
-    alert('Please enter your API key.');
-  }
-});
-
-generateButton.addEventListener('click', async () => {
-  const promptText = promptInput.value;
-  const apiKey = getApiKey(); // Get the API key from session storage
-
-  if (!apiKey) {
-    alert('API key not found. Please enter it.');
-    apiKeyContainer.style.display = 'block';
-    promptBuilderContainer.style.display = 'none';
-    return;
-  }
-
-  if (!promptText.trim()) {
-    geminiOutput.textContent = "Please enter a prompt.";
-    return;
-  }
-
-  geminiOutput.textContent = "Generating response...";
-
-  try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({
-        contents: [{
-          parts: [{ text: promptText }],
-        }],
-      }),
-    });
-
-    if (!response.ok) {
-      const errorData = await response.json();
-      console.error("Gemini API Error:", errorData);
-      geminiOutput.textContent = `Error: ${errorData.error.message}`;
-      return;
-    }
-
-    const data = await response.json();
-    console.log("Gemini API Response:", data);
-
-    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
-      geminiOutput.textContent = data.candidates[0].content.parts[0].text;
-    } else {
-      geminiOutput.textContent = "No response received from Gemini.";
-    }
-
-  } catch (error) {
-    console.error("Error calling Gemini API:", error);
-    geminiOutput.textContent = "An error occurred while generating the response.";
-  }
-});
-
-</script>
-  
+  </script>
 </body>
 </html>
