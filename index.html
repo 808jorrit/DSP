@@ -81,10 +81,15 @@
               </div>
 
               <div class="mb-3">
+                <label for="raw_text" class="form-label">Enter paper</label>
+                <textarea id="specifications" class="form-control" rows="4" placeholder="Enter text to be summarized..."></textarea>
+              </div>
+
+              <div class="mb-3">
                 <label for="specifications" class="form-label">Other Specifications</label>
                 <textarea id="specifications" class="form-control" rows="4" placeholder="Add details..."></textarea>
               </div>
-
+              
               <button type="button" class="btn btn-primary w-100" onclick="generatePrompt()">Generate Prompt</button>
             </form>
           </div>
@@ -156,6 +161,10 @@
 
       if (specifications) {
         promptText += `Additional specifications: ${specifications}`;
+      }
+
+      if (raw_text) {
+        promptText += `The following raw, unformatted text should be summarized: ${raw_text}`;
       }
 
       // Display the generated prompt
@@ -260,21 +269,17 @@ const saveApiKeyButton = document.getElementById('save-api-key-button');
 const geminiOutput = document.getElementById('gemini-output');
 const useGeneratedPromptButton = document.getElementById('useGeneratedPrompt');
 
-// Function to get the API key from session storage
 function getApiKey() {
   return sessionStorage.getItem('geminiApiKey');
 }
 
-// Function to save the API key to session storage
 function saveApiKey(key) {
   sessionStorage.setItem('geminiApiKey', key);
 }
 
-// Check if API key is already in session storage
 const storedApiKey = getApiKey();
-
+    
 if (!storedApiKey) {
-  // If API key doesn't exist, show the API key input
   apiKeyContainer.style.display = 'block';
 }
 
