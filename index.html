@@ -16,17 +16,12 @@
       <h1>Prompt Generator Tool</h1>
       <p class="lead">Create professional prompts with ease</p>
     </header>
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="card-title text-primary mb-3">Chat with AI</h2>
-        <div id="chatWindow" class="bg-light p-3 rounded" style="height: 300px; overflow-y: auto;">
-          <!-- Chat messages will appear here -->
-        </div>
-        <div class="input-group mt-3">
-          <input type="text" id="userInput" class="form-control" placeholder="Type your message...">
-          <button class="btn btn-primary" onclick="sendMessage()">Send</button>
-        </div>
-      </div>
+    
+    <div>
+      <h1>ChatGPT Demo</h1>
+      <textarea id="userInput" placeholder="Type your question here"></textarea>
+      <button id="submitBtn">Ask GPT</button>
+      <div id="responseBox"></div>
     </div>
 
     <!-- Main Content -->
@@ -239,43 +234,52 @@
     // Load saved prompts on page load
     window.onload = loadSavedPrompts;
 
-/*
-Run this model in Javascript
+async function askGPT(prompt) {
+      const apiKey = "YOUR_OPENAI_API_KEY"; // Replace this with your OpenAI API key
+      const endpoint = "https://api.openai.com/v1/chat/completions";
 
-> npm install openai
-*/
-import OpenAI from "openai";
+      try {
+        const response = await fetch(endpoint, {
+          method: "POST",
+          headers: {
+            "Content-Type": "application/json",
+            "Authorization": `Bearer ${apiKey}`,
+          },
+          body: JSON.stringify({
+            model: "gpt-4",
+            messages: [{ role: "user", content: prompt }],
+            temperature: 0.7,
+            max_tokens: 150,
+          }),
+        });
 
-// To authenticate with the model you will need to generate a personal access token (PAT) in your GitHub settings. 
-// Create your PAT token by following instructions here: https://docs.github.com/en/authentication/keeping-your-account-and-data-secure/managing-your-personal-access-tokens
-const token = process.env["GITHUB_TOKEN"];
+        const data = await response.json();
+        return data.choices[0].message.content;
+      } catch (error) {
+        console.error("Error communicating with GPT API:", error);
+        return "An error occurred while fetching the response.";
+      }
+    }
 
-export async function main() {
+    document.getElementById("submitBtn").addEventListener("click", async () => {
+      const userInput = document.getElementById("userInput").value;
+      const responseBox = document.getElementById("responseBox");
 
-  const client = new OpenAI({
-    baseURL: "https://models.inference.ai.azure.com",
-    apiKey: token
-  });
+      if (!userInput) {
+        responseBox.textContent = "Please enter a prompt!";
+        return;
+      }
 
-  const response = await client.chat.completions.create({
-    messages: [
-      { role:"system", content: "" },
-      { role:"user", content: "What is the capital of France?" }
-    ],
-    model: "gpt-4o",
-    temperature: 1,
-    max_tokens: 4096,
-    top_p: 1
-  });
-
-  console.log(response.choices[0].message.content);
-}
+      responseBox.textContent = "Loading...";
+      const gptResponse = await askGPT(userInput);
+      responseBox.textContent = gptResponse;
+    });
 
 main().catch((err) => {
   console.error("The sample encountered an error:", err);
 });
 
-  </script>
+</script>
   
 </body>
 </html>
