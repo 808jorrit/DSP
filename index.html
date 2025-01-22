@@ -86,9 +86,8 @@
 
             <!-- Buttons for Copy and Save -->
             <div class="d-flex justify-content-between mt-3">
-              <button class="btn btn-success" onclick="copyPrompt()">Copy Prompt</button>
               <button class="btn btn-secondary" onclick="savePrompt()">Save Prompt</button>
-              <button class="btn btn-info" id="useGeneratedPrompt">Generate output</button>
+              <button class="btn btn-success" id="useGeneratedPrompt">Generate output</button>
             </div>
 
             <!-- Saved Prompts List -->
@@ -188,20 +187,6 @@ function generatePrompt() {
   const generatedPromptDiv = document.getElementById('generatedPrompt');
   generatedPromptDiv.innerText = promptText.trim();
 }
-
-
-    function copyPrompt() {
-      const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-
-      if (!generatedPrompt) {
-        alert('Please generate a prompt first!');
-        return;
-      }
-
-      navigator.clipboard.writeText(generatedPrompt)
-        .then(() => alert('Prompt copied to clipboard!'))
-        .catch(err => alert('Failed to copy prompt.'));
-    }
 
     function savePrompt() {
       const topic = document.getElementById('topic').value;
