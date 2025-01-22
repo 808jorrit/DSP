@@ -93,6 +93,21 @@ button.night-mode:hover {
   border-color: #444444;
 }
 
+/* Small Night Mode Button */
 #toggleNightMode {
-  transition: all 0.3s ease;
+  font-size: 0.875rem; /* Slightly smaller text */
+  padding: 0.25rem 0.5rem; /* Smaller padding */
+  border-radius: 0.2rem; /* Rounded corners */
+  z-index: 1000; /* Ensure it stays on top */
 }
+
+/* Position adjustments for absolute positioning inside header */
+header {
+  position: relative; /* Make the header the containing block for the button */
+}
+
+#toggleNightMode.position-absolute {
+  top: 0.5rem; /* Distance from the top */
+  right: 0.5rem; /* Distance from the right */
+}
+
