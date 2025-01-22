@@ -29,4 +29,11 @@ body {
     font-family: 'Courier New', monospace;
     font-size: 1rem;
   }
-  
+
+  .gemini-output-box {
+      border: 1px solid #ced4da; /* Light grey border */
+      border-radius: 0.5rem; /* Rounded corners */
+      padding: 1rem; /* Add some padding inside the box */
+      background-color: #f8f9fa; /* Light background color */
+      margin-top: 1rem; /* Add some space above the box */
+    }
