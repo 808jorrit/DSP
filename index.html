@@ -305,34 +305,57 @@ function generatePrompt() {
     window.onload = loadSavedPrompts;
 
 const apiKeyContainer = document.getElementById('api-key-container');
-const apiKeyInput = document.getElementById('api-key-input');
-const saveApiKeyButton = document.getElementById('save-api-key-button');
-const geminiOutput = document.getElementById('gemini-output');
-const useGeneratedPromptButton = document.getElementById('useGeneratedPrompt');
+const geminiApiKeyInput = document.getElementById('gemini-api-key-input');
+const saveGeminiApiKeyButton = document.getElementById('save-gemini-api-key-button');
+const openaiApiKeyInput = document.getElementById('openai-api-key-input');
+const saveOpenaiApiKeyButton = document.getElementById('save-openai-api-key-button');
 
-function getApiKey() {
-  return sessionStorage.getItem('geminiApiKey');
+// Function to get API keys from sessionStorage
+function getApiKey(keyName) {
+  return sessionStorage.getItem(keyName);
 }
 
-function saveApiKey(key) {
-  sessionStorage.setItem('geminiApiKey', key);
+// Function to save API keys to sessionStorage
+function saveApiKey(keyName, keyValue) {
+  sessionStorage.setItem(keyName, keyValue);
 }
 
-const storedApiKey = getApiKey();
-    
-if (!storedApiKey) {
-  apiKeyContainer.style.display = 'block';
-}
-
-saveApiKeyButton.addEventListener('click', () => {
-  const apiKey = apiKeyInput.value.trim();
-  if (apiKey) {
-    saveApiKey(apiKey);
-    apiKeyContainer.style.display = 'none';
+// Handle Gemini API Key
+saveGeminiApiKeyButton.addEventListener('click', () => {
+  const geminiApiKey = geminiApiKeyInput.value.trim();
+  if (geminiApiKey) {
+    saveApiKey('geminiApiKey', geminiApiKey);
+    alert('Gemini API Key saved successfully!');
+    geminiApiKeyInput.value = '';
   } else {
-    alert('Please enter your API key.');
+    alert('Please enter a valid Gemini API key.');
   }
 });
+
+// Handle OpenAI API Key
+saveOpenaiApiKeyButton.addEventListener('click', () => {
+  const openaiApiKey = openaiApiKeyInput.value.trim();
+  if (openaiApiKey) {
+    saveApiKey('openaiApiKey', openaiApiKey);
+    alert('OpenAI API Key saved successfully!');
+    openaiApiKeyInput.value = '';
+  } else {
+    alert('Please enter a valid OpenAI API key.');
+  }
+});
+
+// Load keys from session storage on page load
+window.onload = function () {
+  const geminiApiKey = getApiKey('geminiApiKey');
+  const openaiApiKey = getApiKey('openaiApiKey');
+
+  if (!geminiApiKey || !openaiApiKey) {
+    document.getElementById('api-key-container').style.display = 'block';
+  } else {
+    document.getElementById('api-key-container').style.display = 'none';
+  }
+};
+
 
 useGeneratedPromptButton.addEventListener('click', async () => {
   const generatedPromptText = document.getElementById('generatedPrompt').innerText;
