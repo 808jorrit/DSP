@@ -77,6 +77,7 @@
                   <option>Students</option>
                   <option>Investors</option>
                   <option>Academia</option>
+                  <option>General public</option>
                 </select>
               </div>
 
@@ -157,7 +158,7 @@
       }
 
       if (audience) {
-        promptText += `The summary is aimed at ${audience}; adjust the level of language proficiency accordingly. `;
+        promptText += `The summary is aimed at ${audience} adjust the level of language proficiency accordingly. Subtly adjust the summary to what appeals to ${audience} considering the goal `;
       }
 
       if (specifications) {
@@ -165,10 +166,10 @@
       }
 
       if (raw_text) {
-        promptText += `The following raw, unformatted text should be summarized: ${raw_text}`;
+        promptText += `The following raw, unformatted text should be summarized: ${raw_text} .` ;
       }
 
-      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', ')};`;
+      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', '). Mimic the sentiment of the input text. `;
       
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
