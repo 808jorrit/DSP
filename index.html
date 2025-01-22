@@ -143,7 +143,7 @@
       const raw_text = document.getElementById('raw_text').value;
 
       // Start building the prompt
-      let promptText = 'Act as if you are an professional marketeer. You are going to generate a short story / summary based on the raw text with an specific goal, format and tone.';
+      let promptText = 'Act as if you are an professional marketeer. You are going to generate a short story / summary based on the raw text with an specific goal, format and tone. ';
 
       if (topic) {
         promptText += `The topic of the paper is ${topic}. `;
@@ -158,18 +158,18 @@
       }
 
       if (audience) {
-        promptText += `The summary is aimed at ${audience} adjust the level of language proficiency accordingly. Subtly adjust the summary to what appeals to ${audience} considering the goal `;
-      }
-
-      if (specifications) {
-        promptText += `Additional specifications: ${specifications}`;
+        promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
       }
 
       if (raw_text) {
         promptText += `The following raw, unformatted text should be summarized: ${raw_text} .` ;
       }
 
-      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. `;
+      if (specifications) {
+        promptText += `Additional specifications: ${specifications}`;
+      }
+      
+      promptText += ` Present summary in a coherent and well structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. `;
       
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
