@@ -30,6 +30,16 @@ body {
     font-size: 1rem;
   }
 
+    #generatedPrompt {
+      min-height: 150px;
+      max-height: 300px; /* Set maximum height */
+      overflow-y: auto;  /* Enable vertical scrolling */
+      background-color: #f8f9fa; /* Match 'bg-light' class */
+      border: 1px solid #dee2e6; /* Match 'border' class */
+      padding: 1rem; /* Match 'p-3' class */
+      border-radius: 0.25rem; /* Match 'rounded' class */
+    }
+
   .gemini-output-box {
       border: 1px solid #ced4da; /* Light grey border */
       border-radius: 0.5rem; /* Rounded corners */
