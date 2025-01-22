@@ -42,13 +42,11 @@ body {
   overflow-y: auto;  /* Enable vertical scrolling */
   overflow-x: hidden; /* Prevent horizontal scrolling */
   border: 1px solid #dee2e6; /* Optional: Add a border to match the card styling */
-  padding: 0.5rem; /* Add some inner spacing */
   background-color: #ffffff; /* Optional: Background color */
   border-radius: 0.25rem; /* Match the rounded corners */
   list-style-type: none; /* Optional: Remove default bullets */
   margin: 0; /* Reset margin */
 }
-
 
 
   .gemini-output-box {
@@ -58,3 +56,43 @@ body {
       background-color: #f8f9fa; /* Light background color */
       margin-top: 1rem; /* Add some space above the box */
     }
+
+
+body.night-mode {
+  background-color: #121212;
+  color: #ffffff;
+}
+
+header.night-mode {
+  background-color: #1e1e1e;
+  border-color: #444444;
+  color: #ffffff;
+}
+
+.card.night-mode {
+  background-color: #1e1e1e;
+  border-color: #444444;
+  color: #ffffff;
+}
+
+button.night-mode {
+  background-color: #444444;
+  color: #ffffff;
+  border: 1px solid #666666;
+}
+
+button.night-mode:hover {
+  background-color: #555555;
+}
+
+#generatedPrompt.night-mode,
+#savedPromptsList.night-mode,
+.gemini-output-box.night-mode {
+  background-color: #1e1e1e;
+  color: #ffffff;
+  border-color: #444444;
+}
+
+#toggleNightMode {
+  transition: all 0.3s ease;
+}
