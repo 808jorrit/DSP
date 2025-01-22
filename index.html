@@ -150,7 +150,7 @@
       }
 
       if (channels.length > 0) {
-        promptText += `The content will be distributed on ${channels.join(', ')}; adjust length, jargon, and tone accordingly. `;
+        promptText += `The content will be distributed on ${channels.join(', ')} adjust length, jargon, and tone accordingly. `;
       }
 
       if (purpose) {
@@ -169,7 +169,7 @@
         promptText += `The following raw, unformatted text should be summarized: ${raw_text} .` ;
       }
 
-      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', '). Mimic the sentiment of the input text. `;
+      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. `;
       
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
