@@ -1,7 +1,3 @@
-Delen
-
-
-Je zei:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -162,30 +158,30 @@ function generatePrompt() {
   let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone. ';
 
   if (topic) {
-    promptText += The topic of the paper is ${topic}. ;
+    promptText += `The topic of the paper is ${topic}. `;
   }
 
   if (channels.length > 0) {
-    promptText += The content will be distributed on ${channels.join(', ')} adjust length, jargon, and tone accordingly. ;
+    promptText += `The content will be distributed on ${channels.join(', ')} adjust length, jargon, and tone accordingly. `;
   }
 
   if (purpose) {
-    promptText += The goal is to ${purpose}. ;
+    promptText += `The goal is to ${purpose}. `;
   }
 
   if (audience) {
-    promptText += The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. ;
+    promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
   }
 
-  promptText +=  Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n;
-  promptText +=   \n;
+  promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n`;
+  promptText += `  \n`;
 
   if (extractedPdfText.trim()) {
-    promptText += The following text should be summarized: ${extractedPdfText.trim()} ;
+    promptText += `The following text should be summarized: ${extractedPdfText.trim()} `;
   }
 
   if (specifications) {
-    promptText += Additional specifications: ${specifications};
+    promptText += `Additional specifications: ${specifications}`;
   }
   
   // Display the generated prompt
@@ -200,6 +196,7 @@ function generatePrompt() {
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
+      const geminiOutputText = document.getElementById('gemini-output').innerText;
 
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
@@ -213,6 +210,7 @@ function generatePrompt() {
         audience,
         specifications,
         generatedPrompt,
+        geminiOutputText, 
         timestamp: new Date().toISOString()
       };
 
@@ -232,7 +230,7 @@ function generatePrompt() {
       savedPrompts.forEach((promptData, index) => {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-        listItem.textContent = ${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()};
+        listItem.textContent = `${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()}`;
 
         const loadButton = document.createElement('button');
         loadButton.className = 'btn btn-sm btn-primary';
@@ -255,9 +253,8 @@ function generatePrompt() {
       document.getElementById('purpose').value = promptData.purpose;
       document.getElementById('audience').value = promptData.audience;
       document.getElementById('specifications').value = promptData.specifications;
-
       document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
-
+      document.getElementById('gemini-output').innerText = promptData.geminiOutputText || '';
       alert('Prompt and settings loaded!');
     }
 
@@ -319,7 +316,7 @@ useGeneratedPromptButton.addEventListener('click', async () => {
   geminiOutput.textContent = "Generating response...";
 
   try {
-    const response = await fetch(https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}, {
+    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
       method: 'POST',
       headers: {
         'Content-Type': 'application/json',
@@ -334,7 +331,7 @@ useGeneratedPromptButton.addEventListener('click', async () => {
     if (!response.ok) {
       const errorData = await response.json();
       console.error("Gemini API Error:", errorData);
-      geminiOutput.textContent = Error: ${errorData.error.message};
+      geminiOutput.textContent = `Error: ${errorData.error.message}`;
       return;
     }
 
