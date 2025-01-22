@@ -15,7 +15,6 @@
     <header class="text-center py-4 bg-primary text-white rounded">
       <h1>Prompt Generator Tool</h1>
       <p class="lead">Create professional prompts with ease</p>
-      <button id="toggleNightMode" class="btn btn-sm btn-light position-absolute top-0 end-0 m-2">Night Mode</button>
     </header>
     <!-- Main Content -->
     <div class="row mt-4">
@@ -124,34 +123,7 @@
   
  
   <script>
-    const toggleNightModeButton = document.getElementById('toggleNightMode');
-const body = document.body;
 
-// Function to toggle night mode
-function toggleNightMode() {
-  const isNightMode = body.classList.toggle('night-mode'); // Toggle class on body
-
-  // Toggle 'night-mode' class for elements
-  document.querySelectorAll('.card, #generatedPrompt, #savedPromptsList, .gemini-output-box, header').forEach(el => {
-    el.classList.toggle('night-mode');
-  });
-
-  // Update button text based on mode
-  toggleNightModeButton.textContent = isNightMode ? 'Light Mode' : 'Night Mode';
-
-  // Save user preference to localStorage
-  localStorage.setItem('nightMode', isNightMode ? 'enabled' : 'disabled');
-}
-
-// Load user's preference from localStorage
-if (localStorage.getItem('nightMode') === 'enabled') {
-  toggleNightMode();
-}
-
-// Add click event listener to the button
-toggleNightModeButton.addEventListener('click', toggleNightMode);
-
-    
     document.getElementById('pdf-upload').addEventListener('change', handlePdfUpload);
 
 let extractedPdfText = '';
