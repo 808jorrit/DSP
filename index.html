@@ -196,6 +196,7 @@ function generatePrompt() {
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
+      const geminiOutputText = document.getElementById('gemini-output').innerText;
 
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
@@ -209,6 +210,7 @@ function generatePrompt() {
         audience,
         specifications,
         generatedPrompt,
+        geminiOutputText, 
         timestamp: new Date().toISOString()
       };
 
@@ -251,9 +253,8 @@ function generatePrompt() {
       document.getElementById('purpose').value = promptData.purpose;
       document.getElementById('audience').value = promptData.audience;
       document.getElementById('specifications').value = promptData.specifications;
-
       document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
-
+      document.getElementById('gemini-output').innerText = promptData.geminiOutputText || '';
       alert('Prompt and settings loaded!');
     }
 
