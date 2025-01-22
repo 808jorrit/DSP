@@ -1,3 +1,7 @@
+Delen
+
+
+Je zei:
 <!DOCTYPE html>
 <html lang="en">
 <head>
@@ -101,60 +105,24 @@
           </div>
         </div>
       </div>
-    <!-- Output Section -->
-<div class="mt-5">
-  <div class="card shadow-sm">
-    <div class="card-body">
-      <h2 class="card-title text-primary mb-3">Output</h2>
-      <ul class="nav nav-tabs" id="outputTabs" role="tablist">
-        <li class="nav-item">
-          <button class="nav-link active" id="gemini-tab" data-bs-toggle="tab" data-bs-target="#gemini-output-tab" type="button" role="tab" aria-controls="gemini-output-tab" aria-selected="true">
-            Gemini
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="openai-tab" data-bs-toggle="tab" data-bs-target="#openai-output-tab" type="button" role="tab" aria-controls="openai-output-tab" aria-selected="false">
-            OpenAI GPT
-          </button>
-        </li>
-        <li class="nav-item">
-          <button class="nav-link" id="otherllm-tab" data-bs-toggle="tab" data-bs-target="#otherllm-output-tab" type="button" role="tab" aria-controls="otherllm-output-tab" aria-selected="false">
-            Other LLM
-          </button>
-        </li>
-      </ul>
-      <div class="tab-content" id="outputTabContent">
-        <!-- Gemini Output -->
-        <div class="tab-pane fade show active" id="gemini-output-tab" role="tabpanel" aria-labelledby="gemini-tab">
-          <div id="gemini-output" class="gemini-output-box">
-            <!-- Gemini response will appear here -->
-          </div>
-        </div>
-        <!-- OpenAI Output -->
-        <div class="tab-pane fade" id="openai-output-tab" role="tabpanel" aria-labelledby="openai-tab">
-          <div id="openai-output" class="openai-output-box">
-            <!-- OpenAI response will appear here -->
-          </div>
-        </div>
-        <!-- Other LLM Output -->
-        <div class="tab-pane fade" id="otherllm-output-tab" role="tabpanel" aria-labelledby="otherllm-tab">
-          <div id="otherllm-output" class="otherllm-output-box">
-            <!-- Other LLM response will appear here -->
-          </div>
+    <div class="mt-5">
+      <div class="card shadow-sm">
+        <div class="card-body">
+          <h2 class="card-title text-primary mb-3">Output</h2>
+          <div class="output-container">
+    <div id="gemini-output" class="gemini-output-box">
+      <!-- Response will be displayed here -->
+    </div>
+  </div>
         </div>
       </div>
     </div>
-  </div>
-</div>
 </div>
   </div>
   <div id="api-key-container">
-      <label for="api-key-input">Gemini Key:</label>
+      <label for="api-key-input">Enter your Gemini API Key:</label>
       <input type="password" id="api-key-input">
-      <button id="save-api-key-button">Save</button>
-      <label for="openai-api-key-input">OpenAI Key:</label>
-      <input type="password" id="openai-api-key-input">
-      <button id="save-openai-api-key-button">Save</button>
+      <button id="save-api-key-button">Save API Key</button>
   </div>
   
  
@@ -194,30 +162,30 @@ function generatePrompt() {
   let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone. ';
 
   if (topic) {
-    promptText += `The topic of the paper is ${topic}. `;
+    promptText += The topic of the paper is ${topic}. ;
   }
 
   if (channels.length > 0) {
-    promptText += `The content will be distributed on ${channels.join(', ')} adjust length, jargon, and tone accordingly. `;
+    promptText += The content will be distributed on ${channels.join(', ')} adjust length, jargon, and tone accordingly. ;
   }
 
   if (purpose) {
-    promptText += `The goal is to ${purpose}. `;
+    promptText += The goal is to ${purpose}. ;
   }
 
   if (audience) {
-    promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
+    promptText += The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. ;
   }
 
-  promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n`;
-  promptText += `  \n`;
+  promptText +=  Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n;
+  promptText +=   \n;
 
   if (extractedPdfText.trim()) {
-    promptText += `The following text should be summarized: ${extractedPdfText.trim()} `;
+    promptText += The following text should be summarized: ${extractedPdfText.trim()} ;
   }
 
   if (specifications) {
-    promptText += `Additional specifications: ${specifications}`;
+    promptText += Additional specifications: ${specifications};
   }
   
   // Display the generated prompt
@@ -232,7 +200,6 @@ function generatePrompt() {
       const audience = document.getElementById('audience').value;
       const specifications = document.getElementById('specifications').value;
       const generatedPrompt = document.getElementById('generatedPrompt').innerText;
-      const geminiOutputText = document.getElementById('gemini-output').innerText;
 
       if (!generatedPrompt) {
         alert('Please generate a prompt first!');
@@ -246,7 +213,6 @@ function generatePrompt() {
         audience,
         specifications,
         generatedPrompt,
-        geminiOutputText, 
         timestamp: new Date().toISOString()
       };
 
@@ -266,7 +232,7 @@ function generatePrompt() {
       savedPrompts.forEach((promptData, index) => {
         const listItem = document.createElement('li');
         listItem.className = 'list-group-item d-flex justify-content-between align-items-center';
-        listItem.textContent = `${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()}`;
+        listItem.textContent = ${promptData.topic} - ${new Date(promptData.timestamp).toLocaleString()};
 
         const loadButton = document.createElement('button');
         loadButton.className = 'btn btn-sm btn-primary';
@@ -289,8 +255,9 @@ function generatePrompt() {
       document.getElementById('purpose').value = promptData.purpose;
       document.getElementById('audience').value = promptData.audience;
       document.getElementById('specifications').value = promptData.specifications;
+
       document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
-      document.getElementById('gemini-output').innerText = promptData.geminiOutputText || '';
+
       alert('Prompt and settings loaded!');
     }
 
@@ -305,178 +272,86 @@ function generatePrompt() {
     window.onload = loadSavedPrompts;
 
 const apiKeyContainer = document.getElementById('api-key-container');
-const geminiApiKeyInput = document.getElementById('gemini-api-key-input');
-const saveGeminiApiKeyButton = document.getElementById('save-gemini-api-key-button');
-const openaiApiKeyInput = document.getElementById('openai-api-key-input');
-const saveOpenaiApiKeyButton = document.getElementById('save-openai-api-key-button');
+const apiKeyInput = document.getElementById('api-key-input');
+const saveApiKeyButton = document.getElementById('save-api-key-button');
+const geminiOutput = document.getElementById('gemini-output');
+const useGeneratedPromptButton = document.getElementById('useGeneratedPrompt');
 
-// Function to get API keys from sessionStorage
-function getApiKey(keyName) {
-  return sessionStorage.getItem(keyName);
+function getApiKey() {
+  return sessionStorage.getItem('geminiApiKey');
 }
 
-// Function to save API keys to sessionStorage
-function saveApiKey(keyName, keyValue) {
-  sessionStorage.setItem(keyName, keyValue);
+function saveApiKey(key) {
+  sessionStorage.setItem('geminiApiKey', key);
 }
 
-// Handle Gemini API Key
-saveGeminiApiKeyButton.addEventListener('click', () => {
-  const geminiApiKey = geminiApiKeyInput.value.trim();
-  if (geminiApiKey) {
-    saveApiKey('geminiApiKey', geminiApiKey);
-    alert('Gemini API Key saved successfully!');
-    geminiApiKeyInput.value = '';
+const storedApiKey = getApiKey();
+    
+if (!storedApiKey) {
+  apiKeyContainer.style.display = 'block';
+}
+
+saveApiKeyButton.addEventListener('click', () => {
+  const apiKey = apiKeyInput.value.trim();
+  if (apiKey) {
+    saveApiKey(apiKey);
+    apiKeyContainer.style.display = 'none';
   } else {
-    alert('Please enter a valid Gemini API key.');
+    alert('Please enter your API key.');
   }
 });
-
-// Handle OpenAI API Key
-saveOpenaiApiKeyButton.addEventListener('click', () => {
-  const openaiApiKey = openaiApiKeyInput.value.trim();
-  if (openaiApiKey) {
-    saveApiKey('openaiApiKey', openaiApiKey);
-    alert('OpenAI API Key saved successfully!');
-    openaiApiKeyInput.value = '';
-  } else {
-    alert('Please enter a valid OpenAI API key.');
-  }
-});
-
-// Load keys from session storage on page load
-window.onload = function () {
-  const geminiApiKey = getApiKey('geminiApiKey');
-  const openaiApiKey = getApiKey('openaiApiKey');
-
-  if (!geminiApiKey || !openaiApiKey) {
-    document.getElementById('api-key-container').style.display = 'block';
-  } else {
-    document.getElementById('api-key-container').style.display = 'none';
-  }
-};
-
 
 useGeneratedPromptButton.addEventListener('click', async () => {
   const generatedPromptText = document.getElementById('generatedPrompt').innerText;
+  const apiKey = getApiKey(); // Get the API key from session storage
+
+  if (!apiKey) {
+    alert('API key not found. Please enter it.');
+    apiKeyContainer.style.display = 'block';
+    return;
+  }
 
   if (!generatedPromptText.trim()) {
     geminiOutput.textContent = "Please generate a prompt first.";
     return;
   }
 
-  // Clear outputs
-  document.getElementById('gemini-output').textContent = "Generating response from Gemini...";
-  document.getElementById('openai-output').textContent = "Generating response from OpenAI GPT...";
-  document.getElementById('otherllm-output').textContent = "Generating response from Other LLM...";
-
-  // Simultaneously fetch responses from all LLMs
-  await Promise.all([
-    fetchGeminiResponse(generatedPromptText),
-    fetchOpenAIResponse(generatedPromptText),
-    fetchOtherLLMResponse(generatedPromptText)
-  ]);
-});
-    
-async function fetchGeminiResponse(promptText) {
-  const geminiOutput = document.getElementById('gemini-output');
-  const apiKey = getApiKey();
+  geminiOutput.textContent = "Generating response...";
 
   try {
-    const response = await fetch(`https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}`, {
+    const response = await fetch(https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=${apiKey}, {
       method: 'POST',
-      headers: { 'Content-Type': 'application/json' },
+      headers: {
+        'Content-Type': 'application/json',
+      },
       body: JSON.stringify({
-        contents: [{ parts: [{ text: promptText }] }]
+        contents: [{
+          parts: [{ text: generatedPromptText }],
+        }],
       }),
     });
 
-    if (!response.ok) throw new Error("Gemini API Error");
+    if (!response.ok) {
+      const errorData = await response.json();
+      console.error("Gemini API Error:", errorData);
+      geminiOutput.textContent = Error: ${errorData.error.message};
+      return;
+    }
 
     const data = await response.json();
-    geminiOutput.textContent = data.candidates?.[0]?.content?.parts?.[0]?.text || "No response from Gemini.";
-  } catch (error) {
-    console.error(error);
-    geminiOutput.textContent = "Error fetching Gemini response.";
-  }
-}
+    console.log("Gemini API Response:", data);
 
-const saveOpenaiApiKeyButton = document.getElementById('save-openai-api-key-button');
-    const openaiApiKeyInput = document.getElementById('openai-api-key-input');
-    saveOpenaiApiKeyButton.addEventListener('click', () => {
-      const openaiApiKey = openaiApiKeyInput.value.trim();
-      if (openaiApiKey) {
-        sessionStorage.setItem('openaiApiKey', openaiApiKey);
-        alert('OpenAI API Key saved successfully!');
-        openaiApiKeyInput.value = '';
-      } else {
-        alert('Please enter a valid OpenAI API key.');
-      }
-    });
-
-    document.getElementById('useGeneratedPrompt').addEventListener('click', async () => {
-      const generatedPromptText = document.getElementById('generatedPrompt').innerText;
-
-      if (!generatedPromptText.trim()) {
-        document.getElementById('gemini-output').textContent = "Please generate a prompt first.";
-        return;
-      }
-
-      // Clear outputs
-      document.getElementById('gemini-output').textContent = "Generating response from Gemini...";
-      document.getElementById('openai-output').textContent = "Generating response from OpenAI GPT...";
-      document.getElementById('otherllm-output').textContent = "Generating response from Other LLM...";
-
-      // Fetch responses
-      await Promise.all([
-        fetchGeminiResponse(generatedPromptText),
-        fetchOpenAIResponse(generatedPromptText),
-        fetchOtherLLMResponse(generatedPromptText),
-      ]);
-    });
-
-    async function fetchOpenAIResponse(promptText) {
-      const openaiOutput = document.getElementById('openai-output');
-      const openaiApiKey = sessionStorage.getItem('openaiApiKey'); // Dynamically fetch OpenAI key
-
-      if (!openaiApiKey) {
-        openaiOutput.textContent = "OpenAI API Key not set. Please set it first.";
-        return;
-      }
-
-      try {
-        const response = await fetch("https://api.openai.com/v1/chat/completions", {
-          method: 'POST',
-          headers: {
-            'Content-Type': 'application/json',
-            'Authorization': `Bearer ${openaiApiKey}`
-          },
-          body: JSON.stringify({
-            model: "gpt-4",
-            messages: [{ role: "system", content: "You are a helpful assistant." }, { role: "user", content: promptText }]
-          }),
-        });
-
-        if (!response.ok) throw new Error("OpenAI API Error");
-
-        const data = await response.json();
-        openaiOutput.textContent = data.choices?.[0]?.message?.content || "No response from OpenAI.";
-      } catch (error) {
-        console.error(error);
-        openaiOutput.textContent = "Error fetching OpenAI response.";
-      }
+    if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
+      geminiOutput.textContent = data.candidates[0].content.parts[0].text;
+    } else {
+      geminiOutput.textContent = "No response received from Gemini.";
     }
-    async function fetchOtherLLMResponse(promptText) {
-  const otherLLMOutput = document.getElementById('otherllm-output');
 
-  try {
-    // Replace with the actual API call for the other LLM
-    otherLLMOutput.textContent = "Other LLM response generation not implemented.";
   } catch (error) {
-    console.error(error);
-    otherLLMOutput.textContent = "Error fetching Other LLM response.";
+    console.error("Error calling Gemini API:", error);
+    geminiOutput.textContent = "An error occurred while generating the response.";
   }
-}
+});
 
 </script>
 
