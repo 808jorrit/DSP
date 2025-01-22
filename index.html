@@ -142,10 +142,10 @@
       const raw_text = document.getElementById('raw_text').value;
 
       // Start building the prompt
-      let promptText = '';
+      let promptText = 'Act as if you are an professional marketeer. You are going to generate a short story / summary based on the raw text with an specific goal, format and tone.';
 
       if (topic) {
-        promptText += `Generate a short story / summary based on the attached document. The topic is ${topic}. `;
+        promptText += `The topic of the paper is ${topic}. `;
       }
 
       if (channels.length > 0) {
@@ -168,6 +168,8 @@
         promptText += `The following raw, unformatted text should be summarized: ${raw_text}`;
       }
 
+      promptText += `Present summary in a coherent and well structured output format tailored to ${channels.join(', ')};`;
+      
       // Display the generated prompt
       const generatedPromptDiv = document.getElementById('generatedPrompt');
       generatedPromptDiv.innerText = promptText.trim();
