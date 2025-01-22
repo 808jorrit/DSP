@@ -37,6 +37,20 @@ body {
     border-radius: 0.25rem; /* Match 'rounded' class */
     }
 
+#savedPromptsList {
+  max-height: 200px; /* Set the maximum height */
+  overflow-y: auto;  /* Enable vertical scrolling */
+  overflow-x: hidden; /* Prevent horizontal scrolling */
+  border: 1px solid #dee2e6; /* Optional: Add a border to match the card styling */
+  padding: 0.5rem; /* Add some inner spacing */
+  background-color: #ffffff; /* Optional: Background color */
+  border-radius: 0.25rem; /* Match the rounded corners */
+  list-style-type: none; /* Optional: Remove default bullets */
+  margin: 0; /* Reset margin */
+}
+
+
+
   .gemini-output-box {
       border: 1px solid #ced4da; /* Light grey border */
       border-radius: 0.5rem; /* Rounded corners */
