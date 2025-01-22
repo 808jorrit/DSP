@@ -175,6 +175,7 @@ function generatePrompt() {
   }
 
   promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n`;
+  promptText += `  \n`;
 
   if (extractedPdfText.trim()) {
     promptText += `The following text should be summarized: ${extractedPdfText.trim()} `;
