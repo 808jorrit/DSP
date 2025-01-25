@@ -103,55 +103,108 @@
       </div>
       
        <div class="mt-5">
-    <div class="card shadow-sm">
-      <div class="card-body">
-        <h2 class="card-title text-primary mb-3">Output</h2>
-        <div class="output-container">
-          <ul class="nav nav-tabs" id="outputTabs" role="tablist">
-            <li class="nav-item" role="presentation">
-              <button class="nav-link active" id="gemini-tab" data-bs-toggle="tab" data-bs-target="#gemini-output" type="button" role="tab" aria-controls="gemini-output" aria-selected="true">Gemini</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="openai-tab" data-bs-toggle="tab" data-bs-target="#openai-output" type="button" role="tab" aria-controls="openai-output" aria-selected="false">OpenAI</button>
-            </li>
-            <li class="nav-item" role="presentation">
-              <button class="nav-link" id="placeholder1-tab" data-bs-toggle="tab" data-bs-target="#placeholder1-output" type="button" role="tab" aria-controls="placeholder1-output" aria-selected="false">LLM placeholder</button>
-            </li>
-             <li class="nav-item" role="presentation">
-              <button class="nav-link" id="placeholder2-tab" data-bs-toggle="tab" data-bs-target="#placeholder2-output" type="button" role="tab" aria-controls="placeholder2-output" aria-selected="false">LLM placeholder 2</button>
-            </li>
-          </ul>
-          <div class="tab-content" id="outputTabContent">
-            <div class="tab-pane fade show active gemini-output-box" id="gemini-output" role="tabpanel" aria-labelledby="gemini-tab">
-              <!-- Gemini response will be here -->
-            </div>
-            <div class="tab-pane fade gemini-output-box" id="openai-output" role="tabpanel" aria-labelledby="openai-tab">
-              <!-- OpenAI response will be here -->
-            </div>
-               <div class="tab-pane fade gemini-output-box" id="placeholder1-output" role="tabpanel" aria-labelledby="placeholder1-tab">
-               <!-- Placeholder 1 response will be here -->
-            </div>
-               <div class="tab-pane fade gemini-output-box" id="placeholder2-output" role="tabpanel" aria-labelledby="placeholder2-tab">
-               <!-- Placeholder 2 response will be here -->
-            </div>
+            <div class="card shadow-sm">
+              <div class="card-body">
+                <h2 class="card-title text-primary mb-3">Output</h2>
+                   <div class="output-container d-flex flex-wrap"> 
+                      
+                        <div class="output-box col-md-6 p-2">
+                          <h3 class="text-secondary">Gemini</h3>
+                            <div class="gemini-output-box">
+                              <!-- Gemini response will be here -->
+                            </div>
+                               <div class="mt-3">
+                                 <p><strong>Metrics:</strong></p>
+                                 <div class="d-flex justify-content-around">
+                                  <div class="text-center">
+                                   <p>Tokens:</p>
+                                   <div id="gemini-tokens-metric">0</div>
+                                 </div>
+                                 <div class="text-center">
+                                   <p>Duration:</p>
+                                   <div id="gemini-duration-metric">0 ms</div>
+                                 </div>
+                                </div>
+                            </div>
+                        </div>
+                        
+                        <div class="output-box col-md-6 p-2">
+                          <h3 class="text-secondary">OpenAI</h3>
+                         <div class="gemini-output-box">
+                            <!-- OpenAI response will be here -->
+                          </div>
+                          <div class="mt-3">
+                              <p><strong>Metrics:</strong></p>
+                                <div class="d-flex justify-content-around">
+                                 <div class="text-center">
+                                  <p>Tokens:</p>
+                                  <div id="openai-tokens-metric">0</div>
+                                </div>
+                                <div class="text-center">
+                                  <p>Duration:</p>
+                                 <div id="openai-duration-metric">0 ms</div>
+                                </div>
+                              </div>
+                          </div>
+                        </div>
+                        
+                        <div class="output-box col-md-6 p-2">
+                          <h3 class="text-secondary">LLM placeholder</h3>
+                            <div class="gemini-output-box">
+                             <!-- Placeholder 1 response will be here -->
+                            </div>
+                            <div class="mt-3">
+                              <p><strong>Metrics:</strong></p>
+                              <div class="d-flex justify-content-around">
+                                <div class="text-center">
+                                  <p>Tokens:</p>
+                                  <div id="placeholder1-tokens-metric">0</div>
+                                </div>
+                                <div class="text-center">
+                                  <p>Duration:</p>
+                                 <div id="placeholder1-duration-metric">0 ms</div>
+                                </div>
+                               </div>
+                          </div>
+                        </div>
+                        
+                       <div class="output-box col-md-6 p-2">
+                          <h3 class="text-secondary">LLM placeholder 2</h3>
+                           <div class="gemini-output-box">
+                           <!-- Placeholder 2 response will be here -->
+                         </div>
+                         <div class="mt-3">
+                            <p><strong>Metrics:</strong></p>
+                              <div class="d-flex justify-content-around">
+                               <div class="text-center">
+                                <p>Tokens:</p>
+                                <div id="placeholder2-tokens-metric">0</div>
+                              </div>
+                              <div class="text-center">
+                                <p>Duration:</p>
+                               <div id="placeholder2-duration-metric">0 ms</div>
+                              </div>
+                             </div>
+                        </div>
+                      </div>
+                   </div>
+              </div>
           </div>
         </div>
-      </div>
-    </div>
-  </div>
-  </div>
-   <div id="api-key-container" style="display: none;">
-      <div class="api-key-form" id="gemini-api-key-form">
-          <label for="gemini-api-key-input">Enter your Gemini API Key:</label>
-          <input type="password" id="gemini-api-key-input">
-          <button id="save-gemini-api-key-button">Save Gemini API Key</button>
-      </div>
-      <div class="api-key-form" id="openai-api-key-form">
-         <label for="openai-api-key-input">Enter your OpenAI API Key:</label>
-         <input type="password" id="openai-api-key-input">
-         <button id="save-openai-api-key-button">Save OpenAI API Key</button>
      </div>
-  </div>
+     
+       <div id="api-key-container" style="display: none;">
+          <div class="api-key-form" id="gemini-api-key-form">
+              <label for="gemini-api-key-input">Enter your Gemini API Key:</label>
+              <input type="password" id="gemini-api-key-input">
+              <button id="save-gemini-api-key-button">Save Gemini API Key</button>
+          </div>
+          <div class="api-key-form" id="openai-api-key-form">
+             <label for="openai-api-key-input">Enter your OpenAI API Key:</label>
+             <input type="password" id="openai-api-key-input">
+             <button id="save-openai-api-key-button">Save OpenAI API Key</button>
+         </div>
+      </div>
 
   <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0-alpha3/dist/js/bootstrap.bundle.min.js"></script>
   <script src="script.js"></script>
