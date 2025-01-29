@@ -42,7 +42,7 @@ function generatePrompt() {
         promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
     }
 
-    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. Start with an hook. \n`;
+    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. Start off with a hook. \n`;
     promptText += `  \n`;
 
     if (extractedPdfText.trim()) {
@@ -53,7 +53,6 @@ function generatePrompt() {
         promptText += `Additional specifications: ${specifications}`;
     }
 
-    // Display prompt
     const generatedPromptDiv = document.getElementById('generatedPrompt');
     generatedPromptDiv.innerText = promptText.trim();
 }
@@ -122,7 +121,6 @@ function loadPromptSettings(promptData) {
     document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
     document.getElementById('gemini-output').innerText = promptData.geminiOutputText || '';
     document.getElementById('openai-output').innerText = promptData.openaiOutputText || '';
-    alert('Prompt and settings loaded!');
 }
 
 function clearSavedPrompts() {
@@ -248,7 +246,7 @@ async function generateOpenaiResponse(prompt) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo", // Or any other model you prefer
+                model: "gpt-3.5-turbo",
                 messages: [{
                     role: "user",
                     content: prompt
