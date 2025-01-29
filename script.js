@@ -1,8 +1,10 @@
 document.getElementById('pdf-upload').addEventListener('change', handlePdfUpload);
 
 let extractedPdfText = '';
+
 async function handlePdfUpload(event) {
     const file = event.target.files[0];
+
     extractedPdfText = '';
     const arrayBuffer = await file.arrayBuffer();
     const pdf = await pdfjsLib.getDocument(arrayBuffer).promise;
@@ -22,7 +24,7 @@ function generatePrompt() {
     const audience = document.getElementById('audience').value;
     const specifications = document.getElementById('specifications').value;
 
-    let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone.';
+    let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone. ';
 
     if (topic) {
         promptText += `The topic of the paper is ${topic}. `;
@@ -40,7 +42,7 @@ function generatePrompt() {
         promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
     }
 
-    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. Start off with a hook. \n`;
+    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. Start with an hook. \n`;
     promptText += `  \n`;
 
     if (extractedPdfText.trim()) {
@@ -50,6 +52,8 @@ function generatePrompt() {
     if (specifications) {
         promptText += `Additional specifications: ${specifications}`;
     }
+
+    // Display prompt
     const generatedPromptDiv = document.getElementById('generatedPrompt');
     generatedPromptDiv.innerText = promptText.trim();
 }
@@ -67,7 +71,6 @@ function savePrompt() {
         alert('Please generate a prompt first!');
         return;
     }
-
     const promptData = {
         topic,
         channels,
@@ -119,6 +122,7 @@ function loadPromptSettings(promptData) {
     document.getElementById('generatedPrompt').innerText = promptData.generatedPrompt;
     document.getElementById('gemini-output').innerText = promptData.geminiOutputText || '';
     document.getElementById('openai-output').innerText = promptData.openaiOutputText || '';
+    alert('Prompt and settings loaded!');
 }
 
 function clearSavedPrompts() {
@@ -127,11 +131,10 @@ function clearSavedPrompts() {
         loadSavedPrompts();
     }
 }
-// Load saved prompts on page load
+
 window.onload = loadSavedPrompts;
 
 const apiKeyContainer = document.getElementById('api-key-container');
-
 const geminiApiKeyForm = document.getElementById('gemini-api-key-form');
 const openaiApiKeyForm = document.getElementById('openai-api-key-form');
 
@@ -151,9 +154,9 @@ saveGeminiApiKeyButton.addEventListener('click', () => {
     if (apiKey) {
         geminiApiKeyForm.style.display = 'none';
     } else {
-        alert('Please enter your Gemini API key.');
+        alert('Please enter Gemini API key.');
     }
-     if (geminiApiKeyInput.value && openaiApiKeyInput.value) {
+     if (geminiApiKeyInput.value) {
         apiKeyContainer.style.display = 'none';
     }
 });
@@ -163,28 +166,33 @@ saveOpenaiApiKeyButton.addEventListener('click', () => {
     if (apiKey) {
         openaiApiKeyForm.style.display = 'none';
     } else {
-        alert('Please enter your OpenAI API key.');
+        alert('Please enter OpenAI API key.');
     }
-    if (geminiApiKeyInput.value && openaiApiKeyInput.value) {
+    if (gopenaiApiKeyInput.value) {
         apiKeyContainer.style.display = 'none';
     }
 });
-
 
 useGeneratedPromptButton.addEventListener('click', async () => {
     const generatedPromptText = document.getElementById('generatedPrompt').innerText;
 
     if (!generatedPromptText.trim()) {
-        geminiOutput.textContent = "No input given";
-        openaiOutput.textContent = "No input given";
+        geminiOutput.textContent = "Please generate a prompt first.";
+        openaiOutput.textContent = "Please generate a prompt first.";
         return;
     }
+
+    geminiOutput.textContent = "Generating response...";
+    openaiOutput.textContent = "Generating response...";
+
+    await generateGeminiResponse(generatedPromptText);
+    await generateOpenaiResponse(generatedPromptText);
 });
 
 async function generateGeminiResponse(prompt) {
     const apiKey = geminiApiKeyInput.value;
     if (!apiKey) {
-        geminiOutput.textContent = 'No Gemini API key';
+        geminiOutput.textContent = 'Gemini API key not found. Please enter it.';
         apiKeyContainer.style.display = 'block';
         return;
     }
@@ -210,6 +218,8 @@ async function generateGeminiResponse(prompt) {
         }
 
         const data = await response.json();
+        console.log("Gemini API Response:", data);
+
         if (data.candidates && data.candidates.length > 0 && data.candidates[0].content && data.candidates[0].content.parts && data.candidates[0].content.parts.length > 0) {
             geminiOutput.textContent = data.candidates[0].content.parts[0].text;
         } else {
@@ -238,7 +248,7 @@ async function generateOpenaiResponse(prompt) {
                 'Authorization': `Bearer ${apiKey}`
             },
             body: JSON.stringify({
-                model: "gpt-3.5-turbo", 
+                model: "gpt-3.5-turbo", // Or any other model you prefer
                 messages: [{
                     role: "user",
                     content: prompt
@@ -248,16 +258,22 @@ async function generateOpenaiResponse(prompt) {
 
         if (!response.ok) {
             const errorData = await response.json();
+            console.error("OpenAI API Error:", errorData);
             openaiOutput.textContent = `Error: ${errorData.error.message}`;
             return;
         }
 
         const data = await response.json();
+        console.log("OpenAI API Response:", data);
 
         if (data.choices && data.choices.length > 0) {
             openaiOutput.textContent = data.choices[0].message.content;
         } else {
             openaiOutput.textContent = "No response received from OpenAI.";
         }
-    } 
+
+    } catch (error) {
+        console.error("Error calling OpenAI API:", error);
+        openaiOutput.textContent = "An error occurred while generating the OpenAI response.";
+    }
 }
