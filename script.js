@@ -22,7 +22,7 @@ function generatePrompt() {
     const audience = document.getElementById('audience').value;
     const specifications = document.getElementById('specifications').value;
 
-    let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone. Start the summary off with a hook';
+    let promptText = 'Act as if you are a professional marketeer. You are going to generate a short story / summary based on the raw text with a specific goal, format, and tone.';
 
     if (topic) {
         promptText += `The topic of the paper is ${topic}. `;
@@ -40,7 +40,7 @@ function generatePrompt() {
         promptText += `The summary is aimed at ${audience}, adjust the level of language proficiency accordingly. Subtly tailor the summary to what appeals to ${audience} considering the goal. `;
     }
 
-    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. \n`;
+    promptText += ` Present summary in a coherent and well-structured output format tailored to ${channels.join(', ')}. Mimic the sentiment of the input text. Start off with a hook. \n`;
     promptText += `  \n`;
 
     if (extractedPdfText.trim()) {
